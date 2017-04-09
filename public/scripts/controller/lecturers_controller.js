@@ -233,37 +233,41 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 
 		//upload image
 					if (files && files.length) {
-								for (var i = 0; i < files.length; i++) {
-								  var file = files[i];
-								  if (!file.$error) {
-										Upload.upload({
-											url: '/menu_Lecturers_image',
-											data: {
-											  username: $scope.username,
-											  file: file  
-											}
-										}).then(function (resp) {
-
-											
-											
-									
-													});
-															
-															
-															
-															
-															
-											
-											}null, function (evt) {
-
-								  }
-								}
+						for (var i = 0; i < files.length; i++) {
+							var file = files[i];
+							if (!file.$error) {
+								Upload.upload({
+									url: '/menu_Lecturers_image',
+									data: {
+									  username: $scope.username,
+									  file: file  
+									}
+								}).then(function (resp) {
+									$timeout(function() {
+										/*$scope.log = 'file: ' +
+										resp.config.data.file.name +
+										', Response: ' + JSON.stringify(resp.data) +
+										'\n' + $scope.log;*/
+										$scope.log = "ok1";
+										// trong nay muon show thi minh dung $scope.log = cai gi do
+									});
+								}, null, function (evt) {
+									/*var progressPercentage = parseInt(100.0 *
+											evt.loaded / evt.total);
+									$scope.log = 'progress: ' + progressPercentage + 
+										'% ' + evt.config.data.file.name + '\n' + */
+									  $scope.log = true;
+									 
+								});	
+								
+							}
+						}
 					}
 					
 					
-					
-					
-				$http.post('/menu_Lecturers', $scope.lecturer).then(function successCallback(response) {
+				
+				
+						$http.post('/menu_Lecturers', $scope.lecturer).then(function successCallback(response) {
 
 							$scope.lecturer.No = $scope.lecturers_list.length + 1;
 							$scope.lecturer.status_lec = 1;
@@ -276,9 +280,11 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 							$scope.code_lec = $scope.lecturer.code_lec;
 							$scope.fullname = $scope.lecturer.fullname;
 							$scope.visibility = true;
+							
 							$timeout(function () {
 								$scope.visibility = false;
 							}, 3000);
+							
 							$scope.lecturer = null;
 							$scope.fullname= null;
 							$scope.image= null;
@@ -286,17 +292,13 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 
 
 
-							}, function errorCallback(response) {
-
-								}
-							);
-
-
-
-
-																																									
-																	
-
+						}, function errorCallback(response) {
+							
+						});
+					
+					
+					
+				
 
 	}
 
@@ -305,6 +307,7 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 	$scope.editt = function (index) {
 		var toSelect = $scope.lecturers_list[index];
 		$scope.editlecturer = toSelect;
+		
 		jQuery("#myModalEdit").on('hidden.bs.modal', function () {
 			$timeout(function () {
 				window.location.reload();
