@@ -102,7 +102,7 @@ router.post('/menu_Lecturers_image', upload.any(), function (reqimg, resimg) {
 });
 	router.post('/menu_Lecturers', function (req, res) {
 		
-						setTimeout(function(){
+						
 								var sql = 'insert into lecturers(code_lec,degree,major,image,description,user_code,status_lec) values ("'+req.body.code_lec+'","'+req.body.degree+'","'+req.body.major+'","'+urlImage.urlImage_name+'","'+req.body.description+'","'+req.body.user_code+'",1)';
 								connection.query(sql, function (err, rows, fields) {
 									if (err) {
@@ -113,7 +113,7 @@ router.post('/menu_Lecturers_image', upload.any(), function (reqimg, resimg) {
 										res.json(rows);
 									}
 								});
-						},500);	
+						
 								
 								
 								
@@ -147,7 +147,7 @@ router.put('/menu_Lecturers/:id', function (req, res) {
 					if(urlImage_edit.urlImage_edit_thuoctinh == ""){
 						urlImage_edit.urlImage_edit_thuoctinh = req.body.image;
 					}	
-setTimeout(function(){
+
 	var sql = "update lecturers set code_lec='" + req.body.code_lec + "',  degree='" + req.body.degree + "',  major='" + req.body.major + "', image='" + urlImage_edit.urlImage_edit_thuoctinh + "', description='" + req.body.description + "', user_code='" + req.body.user_code + "',  status_lec='" + req.body.status_lec + "' where id_lec = '" + id + "'";
 
 	
@@ -161,7 +161,7 @@ setTimeout(function(){
 			
 		}
 	});
-},500);
+
 
 });
 

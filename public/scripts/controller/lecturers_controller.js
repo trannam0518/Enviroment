@@ -233,8 +233,8 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 
 		//upload image
 					if (files && files.length) {
-						for (var i = 0; i < files.length; i++) {
 							var file = files[i];
+							var i =0;
 							if (!file.$error) {
 								Upload.upload({
 									url: '/menu_Lecturers_image',
@@ -252,56 +252,89 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 										// trong nay muon show thi minh dung $scope.log = cai gi do
 									});
 								}, null, function (evt) {
-									/*var progressPercentage = parseInt(100.0 *
+									var progressPercentage = parseInt(100.0 *
 											evt.loaded / evt.total);
 									$scope.log = 'progress: ' + progressPercentage + 
-										'% ' + evt.config.data.file.name + '\n' + */
-									  $scope.log = true;
+										'% ' + evt.config.data.file.name;
+										if(progressPercentage ==100 ){
+											i++;
+											if(progressPercentage ==100 && i ==2){
+															
+													$http.post('/menu_Lecturers', $scope.lecturer).then(function successCallback(response) {
+													$scope.lecturer.No = $scope.lecturers_list.length + 1;
+													$scope.lecturer.status_lec = 1;
+													$scope.lecturers_list.push($scope.lecturer);
+
+													var dt = jQuery('#data_table').dataTable();
+													dt.fnAddData($scope.lecturer);
+													dt.fnDraw();
+													$compile(document.getElementById('data_table'))($scope);
+													$scope.code_lec = $scope.lecturer.code_lec;
+													$scope.fullname = $scope.lecturer.fullname;
+													$scope.visibility = true;
+													
+													$timeout(function () {
+														$scope.visibility = false;
+													}, 3000);
+													
+													$scope.lecturer = null;
+													$scope.fullname= null;
+													$scope.image= null;
+
+
+
+
+												}, function errorCallback(response) {
+													
+												});
+											}
+										}
 									 
 								});	
 								
 							}
-						}
+						
+					}else{
+						
+						
+												$http.post('/menu_Lecturers', $scope.lecturer).then(function successCallback(response) {
+												$scope.lecturer.No = $scope.lecturers_list.length + 1;
+												$scope.lecturer.status_lec = 1;
+												$scope.lecturers_list.push($scope.lecturer);
+
+												var dt = jQuery('#data_table').dataTable();
+												dt.fnAddData($scope.lecturer);
+												dt.fnDraw();
+												$compile(document.getElementById('data_table'))($scope);
+												$scope.code_lec = $scope.lecturer.code_lec;
+												$scope.fullname = $scope.lecturer.fullname;
+												$scope.visibility = true;
+												
+												$timeout(function () {
+													$scope.visibility = false;
+												}, 3000);
+												
+												$scope.lecturer = null;
+												$scope.fullname= null;
+												$scope.image= null;
+
+
+
+
+												}, function errorCallback(response) {
+													
+												});
+						
+									
 					}
 					
-					
-				
-				
-						$http.post('/menu_Lecturers', $scope.lecturer).then(function successCallback(response) {
-
-							$scope.lecturer.No = $scope.lecturers_list.length + 1;
-							$scope.lecturer.status_lec = 1;
-							$scope.lecturers_list.push($scope.lecturer);
-
-							var dt = jQuery('#data_table').dataTable();
-							dt.fnAddData($scope.lecturer);
-							dt.fnDraw();
-							$compile(document.getElementById('data_table'))($scope);
-							$scope.code_lec = $scope.lecturer.code_lec;
-							$scope.fullname = $scope.lecturer.fullname;
-							$scope.visibility = true;
-							
-							$timeout(function () {
-								$scope.visibility = false;
-							}, 3000);
-							
-							$scope.lecturer = null;
-							$scope.fullname= null;
-							$scope.image= null;
-
-
-
-
-						}, function errorCallback(response) {
-							
-						});
-					
-					
-					
-				
-
 	}
-
+	//reload when close modal add
+			jQuery("#myModalAdd").on('hidden.bs.modal', function () {
+				$timeout(function () {
+					window.location.reload();
+				}, 500)
+				});
 
 	//load form edit
 	$scope.editt = function (index) {
@@ -368,26 +401,53 @@ app.controller('lecturer_ctl', ['$scope', '$http', '$window', '$compile', '$time
 									}).then(function (resp) {
 										
 									}, null, function (evt) {
-										//$scope.lecturer.image = evt.config.data.file.name
+										
+										var progressPercentage = parseInt(100.0 *
+											evt.loaded / evt.total);
+										if(progressPercentage ==100 ){
+											i++;
+											if(progressPercentage ==100 && i ==2){
+												
+														$http.put('/menu_Lecturers/' + $scope.editlecturer.id_lec, $scope.editlecturer).then(function successCallback(response) {
+															$scope.message = 'Update Successful';
+															jQuery("#myModalmessage").modal('show');
+															jQuery("#myModalEdit").modal('hide');
+															jQuery("#myModalEdit").on('hidden.bs.modal', function () {
+															$timeout(function () {
+																window.location.reload();
+															}, 500)
+															});
+														}, function errorCallback(response) {
 
-	
+														});
+												
+												
+											}
+													
+										}
+
 									});
 								  }
 								}
-					}
-			//set user_code
-		$http.put('/menu_Lecturers/' + $scope.editlecturer.id_lec, $scope.editlecturer).then(function successCallback(response) {
-            $scope.message = 'Update Successful';
-            jQuery("#myModalmessage").modal('show');
-			jQuery("#myModalEdit").modal('hide');
-			jQuery("#myModalEdit").on('hidden.bs.modal', function () {
-			$timeout(function () {
-				window.location.reload();
-			}, 500)
-			});
-		}, function errorCallback(response) {
+					}else{
+						
+						$http.put('/menu_Lecturers/' + $scope.editlecturer.id_lec, $scope.editlecturer).then(function successCallback(response) {
+							$scope.message = 'Update Successful';
+							jQuery("#myModalmessage").modal('show');
+							jQuery("#myModalEdit").modal('hide');
+							jQuery("#myModalEdit").on('hidden.bs.modal', function () {
+							$timeout(function () {
+								window.location.reload();
+							}, 500)
+							});
+						}, function errorCallback(response) {
 
-		});
+						});
+						
+						
+					}
+			
+
 	}
 
 }]);
