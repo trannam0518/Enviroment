@@ -90,7 +90,7 @@ router.delete('/menu_Lecturers/:id', function (req, res) {
 router.post('/menu_Lecturers_image', upload.any(), function (reqimg, resimg) {
 	
 	
-	
+			
 		   var str = (reqimg.files[0].path);
 			var substr =  str.substr(str.lastIndexOf("r")+1,str.lenth);
 				return  urlImage.urlImage_name = ("images/avatar/"+ substr);	
@@ -101,7 +101,7 @@ router.post('/menu_Lecturers_image', upload.any(), function (reqimg, resimg) {
 
 });
 	router.post('/menu_Lecturers', function (req, res) {
-								
+		
 						setTimeout(function(){
 								var sql = 'insert into lecturers(code_lec,degree,major,image,description,user_code,status_lec) values ("'+req.body.code_lec+'","'+req.body.degree+'","'+req.body.major+'","'+urlImage.urlImage_name+'","'+req.body.description+'","'+req.body.user_code+'",1)';
 								connection.query(sql, function (err, rows, fields) {
@@ -144,6 +144,9 @@ router.post('/menu_Lecturers_image_edit', upload1.any(), function (reqimg1, resi
 
 router.put('/menu_Lecturers/:id', function (req, res) {
 	var id = req.params.id;
+					if(urlImage_edit.urlImage_edit_thuoctinh == ""){
+						urlImage_edit.urlImage_edit_thuoctinh = req.body.image;
+					}	
 setTimeout(function(){
 	var sql = "update lecturers set code_lec='" + req.body.code_lec + "',  degree='" + req.body.degree + "',  major='" + req.body.major + "', image='" + urlImage_edit.urlImage_edit_thuoctinh + "', description='" + req.body.description + "', user_code='" + req.body.user_code + "',  status_lec='" + req.body.status_lec + "' where id_lec = '" + id + "'";
 
